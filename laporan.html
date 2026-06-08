@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SipilPro - Lembar Kendali Opname Laporan</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar no-print">
+            <a href="index.html">🏠 Dashboard Proyek</a>
+            <a href="rab.html">📊 Penyusunan RAB</a>
+            <a href="laporan.html" class="active">🖨️ Laporan Progres Fisik</a>
+        </nav>
+
+        <header>
+            <h1 id="lapProjName">LAPORAN KEMAJUAN FISIK DAN OPNAME PROYEK</h1>
+            <p id="lapProjMeta" style="font-size: 0.85rem; font-weight: bold; margin-top: 5px; color:#334155;"></p>
+        </header>
+
+        <section>
+            <h2>Monitoring Evaluasi Realisasi Fisik Lapangan</h2>
+            <div class="table-responsive">
+                <table id="excelExportTable">
+                    <thead>
+                        <tr>
+                            <th rowspan="2">No</th>
+                            <th rowspan="2">Uraian Pekerjaan</th>
+                            <th rowspan="2">Satuan</th>
+                            <th colspan="3">Kontrak Rencana Anggaran (RAB)</th>
+                            <th colspan="2">Realisasi Capaian Lapangan</th>
+                        </tr>
+                        <tr>
+                            <th>Volume</th>
+                            <th>Harga Satuan (Rp)</th>
+                            <th>Jumlah Harga (Rp)</th>
+                            <th>Progres (%)</th>
+                            <th>Nilai Fisik (Rp)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="lapTableBody">
+                        </tbody>
+                </table>
+            </div>
+
+            <div class="summary-container">
+                <div class="summary-box">
+                    <div class="summary-row">
+                        <span>Total Nilai Kontrak RAB:</span>
+                        <span id="summaryTotalRAB">Rp 0</span>
+                    </div>
+                    <div class="summary-row" style="color: var(--success); font-weight: bold;">
+                        <span>Akumulasi Progres Proyek:</span>
+                        <span id="summaryTotalProgPercent">0.00%</span>
+                    </div>
+                    <div class="summary-row grand-total">
+                        <span>Total Nilai Opname Fisik:</span>
+                        <span id="summaryTotalProgVal">Rp 0</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="action-buttons no-print">
+                <button class="btn btn-green" onclick="exportToSipilExcel()">📊 Ekspor File Excel (.xlsx)</button>
+                <button class="btn btn-blue" onclick="window.print()">🖨️ Cetak Dokumen / Cetak PDF</button>
+            </div>
+        </section>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
