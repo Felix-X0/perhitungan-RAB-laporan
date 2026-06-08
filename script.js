@@ -1,113 +1,204 @@
-// Menjalankan perhitungan otomatis saat halaman pertama kali dimuat
+// Struktur Data Master Standar Proyek Teknik Sipil (WBS Lengkap 6 Divisi)
+const masterDivisions = [
+    { code: "I", name: "PEKERJAAN PERSIAPAN & SMK3 PROYEK" },
+    { code: "II", name: "PEKERJAAN TANAH, GALIAN DAN PONDASI" },
+    { code: "III", name: "PEKERJAAN STRUKTUR BETON BERTULANG MURNI" },
+    { code: "IV", name: "PEKERJAAN DINDING, ARSITEKTUR DAN LANTAI" },
+    { code: "V", name: "PEKERJAAN RANGKA ATAP DAN PLAFOND" },
+    { code: "VI", name: "PEKERJAAN ELEKTRIKAL & MEKANIKAL (SANITER)" }
+];
+
+const defaultItems = [
+    { id: "1.1", div: "I", job: "Direksikit, Papan Nama Proyek & Pembersihan Awal", unit: "Lsm", qty: 1, price: 2500000, progress: 100 },
+    { id: "1.2", div: "I", job: "Pengukuran Koordinat & Pasang Bouwplank Kayu", unit: "M1", qty: 45, price: 95000, progress: 100 },
+    { id: "2.1", div: "II", job: "Galian Tanah Keras Pondasi Lajur", unit: "M3", qty: 32, price: 85000, progress: 80 },
+    { id: "2.2", div: "II", job: "Pasangan Batu Kali Belah Campuran 1:4", unit: "M3", qty: 22, price: 890000, progress: 40 },
+    { id: "3.1", div: "III", job: "Pekerjaan Cor Beton Sloof Uk. 15/20 (K-225)", unit: "M3", qty: 3.8, price: 4100000, progress: 0 },
+    { id: "4.1", div: "IV", job: "Pasangan Dinding Bata Merah h=3m Pasangan 1:5", unit: "M2", qty: 165, price: 135000, progress: 0 },
+    { id: "5.1", div: "V", job: "Pasang Rangka Atap Baja Ringan Standard Penutup Genteng", unit: "M2", qty: 85, price: 210000, progress: 0 },
+    { id: "6.1", div: "VI", job: "Instalasi Titik Lampu Utama Kabel NYM & Stopkontak", unit: "Titik", qty: 14, price: 275000, progress: 0 }
+];
+
+// Otomatisasi pembacaan halaman aktif saat file di-load browser
 document.addEventListener("DOMContentLoaded", () => {
-    mainCalculator();
+    initSipilApp();
 });
 
-// Fungsi Utama Kalkulasi Teknik Sipil Terintegrasi
-function mainCalculator() {
-    const rows = document.querySelectorAll(".row-item");
-    let totalRAB = 0;
-
-    // Langkah 1: Hitung Jumlah Harga Kontrak per Item Pekerjaan
-    rows.forEach(row => {
-        const qty = parseFloat(row.querySelector(".input-qty").value) || 0;
-        const price = parseFloat(row.querySelector(".input-price").value) || 0;
-        const totalPrice = qty * price;
-        
-        row.querySelector(".cell-total-price").innerText = formatRupiah(totalPrice);
-        row.setAttribute("data-total-harga", totalPrice); // Menyimpan nilai angka murni
-        totalRAB += totalPrice;
-    });
-
-    // Menampilkan Total Anggaran Biaya Proyek (RAB)
-    document.getElementById("lblTotalRAB").innerText = formatRupiah(totalRAB);
-
-    // Langkah 2 & 3: Hitung Bobot Rencana & Nilai Opname Riil Lapangan
-    let totalWeightAccumulated = 0;
-    let totalProgressValueAccumulated = 0;
-
-    rows.forEach(row => {
-        const itemPrice = parseFloat(row.getAttribute("data-total-harga")) || 0;
-        
-        // Rumus Sipil: Bobot % = (Harga Item / Total Nilai Proyek) * 100
-        let itemWeight = totalRAB > 0 ? (itemPrice / totalRAB) * 100 : 0;
-        row.querySelector(".cell-weight").innerText = itemWeight.toFixed(2) + "%";
-        totalWeightAccumulated += itemWeight;
-
-        // Membaca input nilai progres lapangan (%)
-        const progressPercent = parseFloat(row.querySelector(".input-progress").value) || 0;
-        
-        // Rumus Sipil: Nilai Progres Rp = (Progres Fisik % / 100) * Harga Kontrak Item
-        const progressValue = (progressPercent / 100) * itemPrice;
-        row.querySelector(".cell-progress-value").innerText = formatRupiah(progressValue);
-        totalProgressValueAccumulated += progressValue;
-    });
-
-    // Menampilkan Akumulasi Parameter Progress di Box Rekapitulasi
-    document.getElementById("lblTotalWeight").innerText = totalWeightAccumulated.toFixed(0) + ".00%";
-    document.getElementById("lblTotalProgressValue").innerText = formatRupiah(totalProgressValueAccumulated);
-    
-    // Rumus Akumulasi Progres Fisik Total Proyek (%)
-    let totalProgressPercent = totalRAB > 0 ? (totalProgressValueAccumulated / totalRAB) * 100 : 0;
-    document.getElementById("lblTotalProgressPercent").innerText = totalProgressPercent.toFixed(2) + "%";
-}
-
-// Fungsi Menambahkan Baris Item Baru di Bawah Divisi yang Dipilih
-function addDivisionItem(divId) {
-    const tbody = document.getElementById("tableBody");
-    const targetDivisionRow = Array.from(tbody.querySelectorAll(".row-division")).find(row => {
-        return row.cells[0].innerText.trim() === divId;
-    });
-
-    if (!targetDivisionRow) return;
-
-    // Mencari baris terakhir di divisi tersebut untuk menyisipkan baris baru di bawahnya
-    let lastRowOfDivision = targetDivisionRow;
-    let nextRow = targetDivisionRow.nextElementSibling;
-    while (nextRow && !nextRow.classList.contains("row-division")) {
-        lastRowOfDivision = nextRow;
-        nextRow = nextRow.nextElementSibling;
+function initSipilApp() {
+    // Jalankan logika sesuai file halaman yang sedang terbuka oleh user
+    if (document.getElementById("p_name")) {
+        loadDashboardPage();
+    } else if (document.getElementById("rabTableBody")) {
+        renderRABPage();
+    } else if (document.getElementById("lapTableBody")) {
+        renderLaporanPage();
     }
-
-    const tr = document.createElement("tr");
-    tr.className = "row-item";
-    tr.setAttribute("data-division", divId);
-    tr.innerHTML = `
-        <td>${divId}.x</td>
-        <td><input type="text" class="input-job" placeholder="Nama Pekerjaan Baru"></td>
-        <td><input type="text" class="input-unit" placeholder="Satuan"></td>
-        <td><input type="number" class="input-qty" value="0" oninput="mainCalculator()"></td>
-        <td><input type="number" class="input-price" value="0" oninput="mainCalculator()"></td>
-        <td class="cell-total-price">Rp 0</td>
-        <td class="cell-weight">0.00%</td>
-        <td><input type="number" class="input-progress" value="0" min="0" max="100" oninput="mainCalculator()"></td>
-        <td class="cell-progress-value">Rp 0</td>
-    `;
-
-    lastRowOfDivision.insertAdjacentElement("afterend", tr);
-    reindexItemNumbers();
-    mainCalculator();
 }
 
-// Merapikan Kode Penomoran Sub-Item (Contoh: 1.1, 1.2, 1.3) Otomatis
-function reindexItemNumbers() {
-    ["I", "II"].forEach(divId => {
-        const items = document.querySelectorAll(`.row-item[data-division="${divId}"]`);
-        items.forEach((item, index) => {
-            item.cells[0].innerText = `${divId}.${index + 1}`;
+// LOGIKA HALAMAN 1: DASHBOARD
+function saveProjectInfo() {
+    const info = {
+        name: document.getElementById("p_name").value,
+        loc: document.getElementById("p_loc").value,
+        contract: document.getElementById("p_contract").value,
+        owner: document.getElementById("p_owner").value,
+        contractor: document.getElementById("p_contractor").value,
+        supervisor: document.getElementById("p_supervisor").value
+    };
+    localStorage.setItem("sipil_project_info", JSON.stringify(info));
+    alert("Data Administrasi Berhasil Disimpan!");
+    window.location.href = "rab.html"; // Otomatis pindah halaman ke penyusunan RAB
+}
+
+function loadDashboardPage() {
+    const saved = localStorage.getItem("sipil_project_info");
+    if (saved) {
+        const info = JSON.parse(saved);
+        document.getElementById("p_name").value = info.name;
+        document.getElementById("p_loc").value = info.loc;
+        document.getElementById("p_contract").value = info.contract;
+        document.getElementById("p_owner").value = info.owner;
+        document.getElementById("p_contractor").value = info.contractor;
+        document.getElementById("p_supervisor").value = info.supervisor;
+    }
+}
+
+// LOGIKA HALAMAN 2: PENYUSUNAN RAB
+function renderRABPage() {
+    const info = JSON.parse(localStorage.getItem("sipil_project_info")) || { name: "Proyek Konstruksi" };
+    document.getElementById("headerProjName").innerText = "RAB: " + info.name;
+
+    let items = JSON.parse(localStorage.getItem("sipil_items_data"));
+    if (!items) { items = defaultItems; localStorage.setItem("sipil_items_data", JSON.stringify(items)); }
+
+    const tbody = document.getElementById("rabTableBody");
+    tbody.innerHTML = "";
+
+    masterDivisions.forEach(div => {
+        // Cetak Baris Kepala Judul Divisi Pekerjaan
+        const divRow = document.createElement("tr");
+        divRow.className = "row-division";
+        divRow.innerHTML = `<td>${div.code}</td><td colspan="5">${div.name}</td>`;
+        tbody.appendChild(divRow);
+
+        // Ambil item-item yang masuk kategori divisi ini
+        const subItems = items.filter(i => i.div === div.code);
+        subItems.forEach((item, index) => {
+            const tr = document.createElement("tr");
+            const rowTotal = item.qty * item.price;
+            tr.innerHTML = `
+                <td class="text-center">${div.code}.${index + 1}</td>
+                <td><input type="text" value="${item.job}" onchange="updateRABValue('${item.id}', 'job', this.value)"></td>
+                <td><input type="number" value="${item.qty}" step="any" oninput="updateRABValue('${item.id}', 'qty', this.value)"></td>
+                <td><input type="text" value="${item.unit}" onchange="updateRABValue('${item.id}', 'unit', this.value)"></td>
+                <td><input type="number" value="${item.price}" oninput="updateRABValue('${item.id}', 'price', this.value)"></td>
+                <td class="text-right" style="font-weight:bold;">Rp ${Math.round(rowTotal).toLocaleString("id-ID")}</td>
+            `;
+            tbody.appendChild(tr);
         });
     });
+    calculateRABTotalScore();
 }
 
-// Format Angka ke Rupiah Indonesia Kontrak Konstruksi
-function formatRupiah(angka) {
-    return "Rp " + Math.round(angka).toLocaleString("id-ID");
+function updateRABValue(id, key, value) {
+    let items = JSON.parse(localStorage.getItem("sipil_items_data"));
+    let item = items.find(i => i.id === id);
+    if (item) {
+        item[key] = key === 'qty' || key === 'price' ? parseFloat(value) || 0 : value;
+        localStorage.setItem("sipil_items_data", JSON.stringify(items));
+    }
+    // Re-render cepat jumlah harga tanpa merusak fokus input ketikan user
+    calculateRABTotalScore();
 }
 
-// Handler Ekspor Otomatis Menjadi Spreadsheet Excel Resmi (.xlsx)
-function exportExcelSipil() {
-    const table = document.getElementById("sipilTable");
+function calculateRABTotalScore() {
+    let items = JSON.parse(localStorage.getItem("sipil_items_data")) || defaultItems;
+    let grandTotal = 0;
+    items.forEach(i => { grandTotal += (i.qty * i.price); });
+    document.getElementById("txtTotalRAB").innerText = "Rp " + Math.round(grandTotal).toLocaleString("id-ID");
+}
+
+function saveRABData() {
+    alert("Seluruh struktur Anggaran RAB berhasil dibekukan ke memori sistem!");
+    window.location.href = "laporan.html"; // Otomatis meloncat ke lembar kendali lapangan
+}
+
+// LOGIKA HALAMAN 3: MONITORING LAPORAN PROGRES
+function renderLaporanPage() {
+    const info = JSON.parse(localStorage.getItem("sipil_project_info")) || {};
+    if (info.name) {
+        document.getElementById("lapProjName").innerText = "LAPORAN KEMAJUAN FISIK: " + info.name.toUpperCase();
+        document.getElementById("lapProjMeta").innerText = `KONTRAK: ${info.contract} | LOKASI: ${info.loc} | PELAKSANA: ${info.contractor}`;
+    }
+
+    let items = JSON.parse(localStorage.getItem("sipil_items_data")) || defaultItems;
+    const tbody = document.getElementById("lapTableBody");
+    tbody.innerHTML = "";
+
+    let totalRAB = 0;
+    items.forEach(i => { totalRAB += (i.qty * i.price); });
+
+    let calculatedTotalProgressValue = 0;
+
+    masterDivisions.forEach(div => {
+        const divRow = document.createElement("tr");
+        divRow.className = "row-division";
+        divRow.innerHTML = `<td>${div.code}</td><td colspan="7">${div.name}</td>`;
+        tbody.appendChild(divRow);
+
+        const subItems = items.filter(i => i.div === div.code);
+        subItems.forEach((item, index) => {
+            const tr = document.createElement("tr");
+            const itemTotalCost = item.qty * item.price;
+            const progressValue = (item.progress / 100) * itemTotalCost;
+            calculatedTotalProgressValue += progressValue;
+
+            tr.innerHTML = `
+                <td class="text-center">${div.code}.${index + 1}</td>
+                <td>${item.job}</td>
+                <td class="text-center">${item.unit}</td>
+                <td class="text-right">${item.qty}</td>
+                <td class="text-right">Rp ${Math.round(item.price).toLocaleString("id-ID")}</td>
+                <td class="text-right" style="font-weight:600;">Rp ${Math.round(itemTotalCost).toLocaleString("id-ID")}</td>
+                <td><input type="number" value="${item.progress}" min="0" max="100" style="font-weight:bold; color:blue;" oninput="updateProgressField('${item.id}', this.value)"></td>
+                <td class="text-right" style="font-weight:bold;">Rp ${Math.round(progressValue).toLocaleString("id-ID")}</td>
+            `;
+            tbody.appendChild(tr);
+        });
+    });
+
+    // Perhitungan Rekapitulasi Akhir Neraca Kontraktor Sipil
+    document.getElementById("summaryTotalRAB").innerText = "Rp " + Math.round(totalRAB).toLocaleString("id-ID");
+    document.getElementById("summaryTotalProgVal").innerText = "Rp " + Math.round(calculatedTotalProgressValue).toLocaleString("id-ID");
+    
+    let totalProgressPercent = totalRAB > 0 ? (calculatedTotalProgressValue / totalRAB) * 100 : 0;
+    document.getElementById("summaryTotalProgPercent").innerText = totalProgressPercent.toFixed(2) + "%";
+}
+
+function updateProgressField(id, val) {
+    let items = JSON.parse(localStorage.getItem("sipil_items_data"));
+    let item = items.find(i => i.id === id);
+    if (item) {
+        item.progress = parseFloat(val) || 0;
+        localStorage.setItem("sipil_items_data", JSON.stringify(items));
+    }
+    // Realtime update rangkuman kalkulasi lembar pengawasan tanpa reload halaman
+    let totalRAB = 0;
+    let totalProgVal = 0;
+    items.forEach(i => {
+        let cost = i.qty * i.price;
+        totalRAB += cost;
+        totalProgVal += ((i.progress / 100) * cost);
+    });
+    document.getElementById("summaryTotalProgVal").innerText = "Rp " + Math.round(totalProgVal).toLocaleString("id-ID");
+    let totalProgressPercent = totalRAB > 0 ? (totalProgVal / totalRAB) * 100 : 0;
+    document.getElementById("summaryTotalProgPercent").innerText = totalProgressPercent.toFixed(2) + "%";
+}
+
+// SISTEM AUTOMATIC EXCEL GENERATOR (STANDAR LAPORAN DINAS SIPIL)
+function exportToSipilExcel() {
+    const table = document.getElementById("excelExportTable");
     const wb = XLSX.utils.table_to_book(table, { sheet: "Laporan Opname Progres" });
-    const fileName = document.getElementById("projectName").value.replace(/ /g, "_");
-    XLSX.writeFile(wb, `Laporan_Fisik_RAB_${fileName}.xlsx`);
+    const info = JSON.parse(localStorage.getItem("sipil_project_info")) || { name: "Proyek" };
+    XLSX.writeFile(wb, `Laporan_Fisik_${info.name.replace(/ /g, "_")}.xlsx`);
 }
