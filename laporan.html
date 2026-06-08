@@ -23,25 +23,25 @@
         <section>
             <h2>Monitoring Evaluasi Realisasi Fisik Lapangan</h2>
             <div class="table-responsive">
-                <table id="excelExportTable">
+                <table>
                     <thead>
                         <tr>
-                            <th rowspan="2">No</th>
-                            <th rowspan="2">Uraian Pekerjaan</th>
-                            <th rowspan="2">Satuan</th>
+                            <th rowspan="2" width="5%">No</th>
+                            <th rowspan="2" width="35%">Uraian Pekerjaan</th>
+                            <th rowspan="2" width="8%">Satuan</th>
                             <th colspan="3">Kontrak Rencana Anggaran (RAB)</th>
                             <th colspan="2">Realisasi Capaian Lapangan</th>
                         </tr>
                         <tr>
-                            <th>Volume</th>
-                            <th>Harga Satuan (Rp)</th>
-                            <th>Jumlah Harga (Rp)</th>
-                            <th>Progres (%)</th>
-                            <th>Nilai Fisik (Rp)</th>
+                            <th width="10%">Volume</th>
+                            <th width="12%">Harga Satuan (Rp)</th>
+                            <th width="15%">Jumlah Harga (Rp)</th>
+                            <th width="10%">Progres (%)</th>
+                            <th width="15%">Nilai Fisik (Rp)</th>
                         </tr>
                     </thead>
                     <tbody id="lapTableBody">
-                        </tbody>
+                    </tbody>
                 </table>
             </div>
 
@@ -62,9 +62,9 @@
                 </div>
             </div>
 
-            <div class="action-buttons no-print">
-                <button class="btn btn-green" onclick="exportToSipilExcel()">📊 Ekspor File Excel (.xlsx)</button>
-                <button class="btn btn-blue" onclick="window.print()">🖨️ Cetak Dokumen / Cetak PDF</button>
+            <div class="action-buttons no-print" style="margin-top: 30px; display: flex; justify-content: center; gap: 15px;">
+                <button class="btn btn-green" style="font-size: 1rem; padding: 12px 25px; background: #166534;" onclick="exportToSipilExcelPro()">📊 Ekspor ke Excel Profesional (.xlsx)</button>
+                <button class="btn btn-blue" style="font-size: 1rem; padding: 12px 25px;" onclick="window.print()">🖨️ Cetak Fisik / Simpan PDF Dinas</button>
             </div>
         </section>
     </div>
