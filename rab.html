@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SipilPro - Penyusunan RAB</title>
+    <title>SipilPro - Penyusunan RAB Profesional</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -16,8 +16,24 @@
 
         <header>
             <h1 id="headerProjName">Rencana Anggaran Biaya (RAB)</h1>
-            <p class="subtitle">Perhitungan Lembar Anggaran dan Pembobotan Struktur Biaya</p>
+            <p class="subtitle">Perhitungan Struktur Biaya Konstruksi & Manajemen WBS</p>
         </header>
+
+        <div class="control-panel no-print" style="background: #f1f5f9; padding: 20px; border-radius: 6px; margin-bottom: 25px; border: 1px solid #cbd5e1;">
+            <h3 style="font-size: 1rem; margin-bottom: 12px; color: #1e3a8a;">🛠️ Panel Kontrol Manajemen Tabel & Pekerjaan</h3>
+            <div style="display: flex; gap: 15px; flex-wrap: wrap; align-items: center;">
+                <div style="display: flex; gap: 8px; align-items: center;">
+                    <label style="font-size: 0.85rem; font-weight: bold;">Pilih Tabel/Divisi:</label>
+                    <select id="selDivision" style="padding: 8px; border-radius: 4px; border: 1px solid #94a3b8; font-size: 0.85rem;"></select>
+                    <button class="btn btn-blue" style="padding: 8px 15px;" onclick="addNewItemDynamic()">+ Tambah Baris Pekerjaan</button>
+                </div>
+                <span style="color: #cbd5e1; font-size: 1.5rem;">|</span>
+                <div style="display: flex; gap: 8px; align-items: center;">
+                    <input type="text" id="newDivName" placeholder="Ketik Nama Tabel/Divisi Baru..." style="padding: 8px; border-radius: 4px; border: 1px solid #94a3b8; width: 240px; font-size: 0.85rem;">
+                    <button class="btn btn-blue" style="background:#475569; padding: 8px 15px;" onclick="addNewDivisionDynamic()">+ Buat Tabel Baru</button>
+                </div>
+            </div>
+        </div>
 
         <section>
             <h2>Lembar Input Nilai Anggaran Pekerjaan</h2>
@@ -25,16 +41,17 @@
                 <table>
                     <thead>
                         <tr>
-                            <th width="5%">No</th>
-                            <th width="45%">Uraian Item Pekerjaan Konstruksi</th>
+                            <th width="7%">No</th>
+                            <th width="43%">Uraian Item Pekerjaan Konstruksi</th>
                             <th width="10%">Volume</th>
                             <th width="10%">Satuan</th>
                             <th width="15%">Harga Satuan (Rp)</th>
                             <th width="15%">Jumlah Total (Rp)</th>
+                            <th width="5%" class="no-print">Aksi</th>
                         </tr>
                     </thead>
                     <tbody id="rabTableBody">
-                        </tbody>
+                    </tbody>
                 </table>
             </div>
 
@@ -47,8 +64,8 @@
                 </div>
             </div>
 
-            <div style="margin-top: 20px; text-align: center;" class="no-print">
-                <button class="btn btn-green" onclick="saveRABData()">💾 Simpan Hasil Perhitungan RAB</button>
+            <div style="margin-top: 25px; text-align: center;" class="no-print">
+                <button class="btn btn-green" style="font-size: 1rem; padding: 12px 30px;" onclick="saveRABData()">💾 Simpan & Kunci Struktur RAB</button>
             </div>
         </section>
     </div>
