@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SipilPro - Dashboard Administrasi</title>
+    <title>SipilPro - Dashboard Administrasi Proyek</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -15,42 +15,43 @@
         </nav>
 
         <header>
-            <h1>SipilPro: Manajemen Pengendalian Proyek</h1>
-            <p class="subtitle">Data Administrasi dan Legalitas Kontrak Konstruksi</p>
+            <h1>SipilPro: Sistem Informasi Manajemen Konstruksi</h1>
+            <p class="subtitle">Input Data Administrasi & Kontrak Utama Proyek</p>
         </header>
 
-        <section>
-            <h2>Input Dokumen Administrasi Proyek</h2>
-            <div class="grid-form">
-                <div class="form-group">
-                    <label>Nama Paket Pekerjaan</label>
-                    <input type="text" id="p_name" value="Pembangunan Fasilitas Air Bersih Kelurahan">
+            <section>
+                <h2>Informasi & Identitas Proyek</h2>
+                <div class="grid-form">
+                    <div class="form-group">
+                        <label for="p_name">Nama Pekerjaan / Proyek:</label>
+                        <input type="text" id="p_name" placeholder="Contoh: Pembangunan Fasilitas Air Bersih">
+                    </div>
+                    <div class="form-group">
+                        <label for="p_contract">Nomor Kontrak / SPK:</label>
+                        <input type="text" id="p_contract" placeholder="Contoh: 027/615/SPK/2026">
+                    </div>
+                    <div class="form-group">
+                        <label for="p_loc">Lokasi Proyek:</label>
+                        <input type="text" id="p_loc" placeholder="Contoh: Kelurahan Makmur">
+                    </div>
+                    <div class="form-group">
+                        <label for="p_owner">Pemilik Proyek (Owner / Dinas):</label>
+                        <input type="text" id="p_owner" placeholder="Contoh: Dinas Pekerjaan Umum">
+                    </div>
+                    <div class="form-group">
+                        <label for="p_contractor">Kontraktor Pelaksana:</label>
+                        <input type="text" id="p_contractor" placeholder="Contoh: CV. Bangun Sarana">
+                    </div>
+                    <div class="form-group">
+                        <label for="p_supervisor">Konsultan Pengawas / Direksi:</label>
+                        <input type="text" id="p_supervisor" placeholder="Contoh: PT. Citra Prima">
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label>Lokasi Proyek</label>
-                    <input type="text" id="p_loc" value="Kabupaten Sumedang, Jawa Barat">
+
+                <div style="margin-top: 30px; text-align: center;">
+                    <button class="btn btn-blue" style="font-size: 1rem; padding: 12px 35px;" onclick="saveProjectInfo()">➡️ Simpan & Lanjutkan ke RAB</button>
                 </div>
-                <div class="form-group">
-                    <label>Nomor Kontrak Kerja</label>
-                    <input type="text" id="p_contract" value="602/04/SPK/PU-PR/2026">
-                </div>
-                <div class="form-group">
-                    <label>Instansi Pemilik (Owner)</label>
-                    <input type="text" id="p_owner" value="Dinas Pekerjaan Umum Daerah">
-                </div>
-                <div class="form-group">
-                    <label>Perusahaan Kontraktor</label>
-                    <input type="text" id="p_contractor" value="PT. Karya Sarana Sipil">
-                </div>
-                <div class="form-group">
-                    <label>Konsultan Pengawas</label>
-                    <input type="text" id="p_supervisor" value="CV. Rekayasa Konsultan Utama">
-                </div>
-            </div>
-            <div style="margin-top: 25px; text-align: center;">
-                <button class="btn btn-blue" onclick="saveProjectInfo()">💾 Simpan Data Administrasi & Lanjut</button>
-            </div>
-        </section>
+            </section>
     </div>
     <script src="script.js"></script>
 </body>
