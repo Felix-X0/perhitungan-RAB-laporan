@@ -3,92 +3,151 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SipilPro - Kalkulator RAB & Laporan</title>
+    <title>SipilPro Kontraktor - Pembuat RAB & Laporan Progres</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 </head>
 <body>
 
     <div class="container">
-        <header class="no-print">
-            <h1>SipilPro</h1>
-            <p>Penyusunan Rencana Anggaran Biaya (RAB) Proyek</p>
+        <header>
+            <div class="header-main">
+                <h1>LAPORAN RENCANA ANGGARAN BIAYA & PROGRES FISIK</h1>
+                <p class="subtitle">Sistem Manajemen Pengendalian Proyek Konstruksi</p>
+            </div>
         </header>
 
         <section class="project-info">
-            <h2>Data Proyek</h2>
+            <h2>Data Administrasi Proyek</h2>
             <div class="grid-form">
                 <div class="form-group">
-                    <label>Nama Proyek</label>
-                    <input type="text" id="projectName" value="Pembangunan Rumah Tinggal Type 45">
+                    <label>Nama Paket Pekerjaan</label>
+                    <input type="text" id="projectName" value="Pembangunan Rumah Tinggal 2 Lantai">
                 </div>
                 <div class="form-group">
-                    <label>Lokasi Proyek</label>
-                    <input type="text" id="projectLocation" value="Jakarta, Indonesia">
+                    <label>Lokasi / Wilayah</label>
+                    <input type="text" id="projectLocation" value="Bandung, Jawa Barat">
                 </div>
                 <div class="form-group">
-                    <label>Pemilik (Owner)</label>
-                    <input type="text" id="projectOwner" value="Bpk. Sudirman">
+                    <label>Pemilik Proyek (Owner)</label>
+                    <input type="text" id="projectOwner" value="Dinas Pekerjaan Umum / Swasta">
                 </div>
                 <div class="form-group">
-                    <label>Tanggal Dibuat</label>
-                    <input type="date" id="projectDate">
+                    <label>Kontraktor Pelaksana</label>
+                    <input type="text" id="projectContractor" value="PT. Bangun Semesta Utama">
                 </div>
             </div>
         </section>
 
         <section class="rab-section">
-            <h2>Rincian Anggaran Biaya</h2>
+            <h2>Lembar Kendali RAB & Progres Fisik Lapangan</h2>
             <div class="table-responsive">
-                <table id="rabTable">
+                <table id="sipilTable">
                     <thead>
                         <tr>
-                            <th>No</th>
-                            <th>Uraian Pekerjaan</th>
+                            <th rowspan="2">No</th>
+                            <th rowspan="2">Uraian Pekerjaan / Divisi</th>
+                            <th rowspan="2">Satuan</th>
+                            <th colspan="3" class="text-center">Rencana Anggaran Biaya (RAB)</th>
+                            <th rowspan="2">Bobot Rencana (%)</th>
+                            <th colspan="2" class="text-center">Realisasi Lapangan</th>
+                        </tr>
+                        <tr>
                             <th>Volume</th>
-                            <th>Satuan</th>
                             <th>Harga Satuan (Rp)</th>
-                            <th>Total Harga (Rp)</th>
-                            <th class="no-print">Aksi</th>
+                            <th>Jumlah Harga (Rp)</th>
+                            <th>Progres (%)</th>
+                            <th>Nilai Progres (Rp)</th>
                         </tr>
                     </thead>
-                    <tbody id="rabBody">
-                        <tr>
-                            <td class="row-number">1</td>
-                            <td><input type="text" class="input-job" value="Pekerjaan Galian Tanah"></td>
-                            <td><input type="number" class="input-qty" value="10" oninput="calculateRow(this)"></td>
-                            <td><input type="text" class="input-unit" value="m3"></td>
-                            <td><input type="number" class="input-price" value="75000" oninput="calculateRow(this)"></td>
-                            <td class="row-total">Rp 750.000</td>
-                            <td class="no-print"><button class="btn-delete" onclick="deleteRow(this)">Hapus</button></td>
+                    <tbody id="tableBody">
+                        <tr class="row-division">
+                            <td><b>I</b></td>
+                            <td colspan="8"><b>PEKERJAAN PERSIAPAN & SMK3</b></td>
+                        </tr>
+                        <tr class="row-item" data-division="I">
+                            <td>1.1</td>
+                            <td><input type="text" class="input-job" value="Pembersihan Lahan dan Direksikit"></td>
+                            <td><input type="text" class="input-unit" value="M2"></td>
+                            <td><input type="number" class="input-qty" value="50" oninput="mainCalculator()"></td>
+                            <td><input type="number" class="input-price" value="45000" oninput="mainCalculator()"></td>
+                            <td class="cell-total-price">Rp 0</td>
+                            <td class="cell-weight">0.00%</td>
+                            <td><input type="number" class="input-progress" value="100" min="0" max="100" oninput="mainCalculator()"></td>
+                            <td class="cell-progress-value">Rp 0</td>
+                        </tr>
+                        <tr class="row-item" data-division="I">
+                            <td>1.2</td>
+                            <td><input type="text" class="input-job" value="Pengukuran dan Pasang Bouwplank"></td>
+                            <td><input type="text" class="input-unit" value="M1"></td>
+                            <td><input type="number" class="input-qty" value="30" oninput="mainCalculator()"></td>
+                            <td><input type="number" class="input-price" value="95000" oninput="mainCalculator()"></td>
+                            <td class="cell-total-price">Rp 0</td>
+                            <td class="cell-weight">0.00%</td>
+                            <td><input type="number" class="input-progress" value="50" min="0" max="100" oninput="mainCalculator()"></td>
+                            <td class="cell-progress-value">Rp 0</td>
+                        </tr>
+
+                        <tr class="row-division">
+                            <td><b>II</b></td>
+                            <td colspan="8"><b>PEKERJAAN TANAH DAN PONDASI</b></td>
+                        </tr>
+                        <tr class="row-item" data-division="II">
+                            <td>2.1</td>
+                            <td><input type="text" class="input-job" value="Galian Tanah Pondasi Batu Kali"></td>
+                            <td><input type="text" class="input-unit" value="M3"></td>
+                            <td><input type="number" class="input-qty" value="24" oninput="mainCalculator()"></td>
+                            <td><input type="number" class="input-price" value="85000" oninput="mainCalculator()"></td>
+                            <td class="cell-total-price">Rp 0</td>
+                            <td class="cell-weight">0.00%</td>
+                            <td><input type="number" class="input-progress" value="0" min="0" max="100" oninput="mainCalculator()"></td>
+                            <td class="cell-progress-value">Rp 0</td>
+                        </tr>
+                        <tr class="row-item" data-division="II">
+                            <td>2.2</td>
+                            <td><input type="text" class="input-job" value="Pasangan Pondasi Batu Belah 1:4"></td>
+                            <td><input type="text" class="input-unit" value="M3"></td>
+                            <td><input type="number" class="input-qty" value="18" oninput="mainCalculator()"></td>
+                            <td><input type="number" class="input-price" value="820000" oninput="mainCalculator()"></td>
+                            <td class="cell-total-price">Rp 0</td>
+                            <td class="cell-weight">0.00%</td>
+                            <td><input type="number" class="input-progress" value="0" min="0" max="100" oninput="mainCalculator()"></td>
+                            <td class="cell-progress-value">Rp 0</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
-            <button class="btn-add no-print" onclick="addRow()">+ Tambah Pekerjaan</button>
+            <div class="table-controls no-print">
+                <button class="btn-control btn-blue" onclick="addDivisionItem('I')">+ Tambah Item Divisi I</button>
+                <button class="btn-control btn-blue" onclick="addDivisionItem('II')">+ Tambah Item Divisi II</button>
+            </div>
         </section>
 
         <section class="summary-section">
             <div class="summary-box">
                 <div class="summary-row">
-                    <span>Subtotal:</span>
-                    <span id="subTotal">Rp 750.000</span>
+                    <span>Total Nilai Kontrak (RAB):</span>
+                    <span id="lblTotalRAB">Rp 0</span>
                 </div>
                 <div class="summary-row">
-                    <span>PPN (11%):</span>
-                    <span id="taxTotal">Rp 82.500</span>
+                    <span>Kumulatif Bobot Rencana:</span>
+                    <span id="lblTotalWeight">0.00%</span>
+                </div>
+                <div class="summary-row text-success">
+                    <span>Total Progres Fisik Riil:</span>
+                    <span id="lblTotalProgressPercent">0.00%</span>
                 </div>
                 <div class="summary-row grand-total">
-                    <span>Total Akhir:</span>
-                    <span id="grandTotal">Rp 832.500</span>
+                    <span>Nilai Opname Terkini:</span>
+                    <span id="lblTotalProgressValue">Rp 0</span>
                 </div>
             </div>
         </section>
 
         <div class="action-buttons no-print">
-            <button class="btn-excel" onclick="exportToExcel()">📊 Ekspor ke Excel</button>
-            <button class="btn-pdf" onclick="window.print()">🖨️ Cetak / Simpan PDF</button>
+            <button class="btn-excel" onclick="exportExcelSipil()">📊 Ekspor Format Lap-Sipil (.xlsx)</button>
+            <button class="btn-pdf" onclick="window.print()">🖨️ Cetak Fisik / Simpan PDF</button>
         </div>
     </div>
 
