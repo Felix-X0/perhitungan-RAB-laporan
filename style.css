@@ -1,8 +1,11 @@
 :root {
     --primary: #0f172a;
     --navy: #1e3a8a;
+    --secondary: #0284c7;
+    --success: #15803d;
     --border-color: #94a3b8;
     --text-main: #1e293b;
+    --bg-light: #f8fafc;
 }
 
 * {
@@ -13,175 +16,116 @@
 }
 
 body {
-    background-color: #cbd5e1;
+    background-color: #e2e8f0;
     color: var(--text-main);
-    padding: 15px;
+    padding: 20px;
 }
 
 .container {
     max-width: 1300px;
     margin: 0 auto;
     background: #ffffff;
-    padding: 25px;
-    border: 2px solid #64748b;
+    padding: 30px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+}
+
+/* Navigation Bar */
+.navbar {
+    display: flex;
+    background-color: var(--primary);
+    padding: 10px 20px;
+    border-radius: 6px;
+    margin-bottom: 25px;
+    gap: 15px;
+}
+
+.navbar a {
+    color: white;
+    text-decoration: none;
+    padding: 8px 16px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    border-radius: 4px;
+    transition: 0.2s;
+}
+
+.navbar a:hover, .navbar a.active {
+    background-color: var(--secondary);
 }
 
 header {
     text-align: center;
     margin-bottom: 25px;
     border-bottom: 4px double var(--primary);
-    padding-bottom: 10px;
+    padding-bottom: 15px;
 }
 
-header h1 {
-    font-size: 1.6rem;
-    color: var(--primary);
-    letter-spacing: 0.5px;
-}
-
-.subtitle {
-    font-size: 0.9rem;
-    text-transform: uppercase;
-    font-weight: bold;
-    color: #475569;
-}
+header h1 { font-size: 1.8rem; color: var(--primary); }
+.subtitle { font-size: 0.9rem; font-weight: bold; color: #475569; text-transform: uppercase; margin-top: 5px;}
 
 h2 {
     font-size: 1.1rem;
     background-color: #f1f5f9;
-    padding: 6px 10px;
+    padding: 8px 12px;
     border-left: 5px solid var(--navy);
-    margin-bottom: 12px;
+    margin-bottom: 15px;
 }
 
-section { margin-bottom: 30px; }
+section { margin-bottom: 35px; }
 
+/* Form Styles */
 .grid-form {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 12px;
-}
-
-.form-group {
-    display: flex;
-    flex-direction: column;
-}
-
-.form-group label {
-    font-size: 0.8rem;
-    font-weight: bold;
-    margin-bottom: 4px;
-    text-transform: uppercase;
-}
-
-.form-group input {
-    padding: 6px;
-    border: 1px solid var(--border-color);
-    font-size: 0.9rem;
-}
-
-/* Aturan Tabel Sipil Kontraktor */
-.table-responsive { overflow-x: auto; }
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.85rem;
-    margin-bottom: 10px;
-}
-
-th, td {
-    border: 1px solid #475569;
-    padding: 6px;
-    vertical-align: middle;
-}
-
-th {
-    background-color: #f8fafc;
-    color: #000;
-    text-align: center;
-    font-weight: bold;
-    text-transform: uppercase;
-}
-
-.text-center { text-align: center; }
-.row-division { background-color: #e2e8f0; }
-
-table input {
-    width: 100%;
-    border: none;
-    background: transparent;
-    font-size: 0.85rem;
-}
-
-table input[type="number"] {
-    text-align: right;
-}
-
-.cell-total-price, .cell-weight, .cell-progress-value {
-    text-align: right;
-    font-weight: bold;
-}
-
-.table-controls {
-    margin-top: 10px;
-    display: flex;
-    gap: 10px;
-}
-
-.btn-control {
-    padding: 6px 12px;
-    font-size: 0.8rem;
-    font-weight: bold;
-    color: white;
-    background-color: var(--navy);
-    border: none;
-    cursor: pointer;
-}
-
-/* Rekapitulasi Keuangan Proyek */
-.summary-section {
-    display: flex;
-    justify-content: flex-end;
-}
-
-.summary-box {
-    width: 400px;
-    border: 1px solid #475569;
-    padding: 15px;
-    background-color: #f8fafc;
-}
-
-.summary-row {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.9rem;
-    margin-bottom: 8px;
-}
-
-.grand-total {
-    border-top: 2px dashed #000;
-    padding-top: 8px;
-    font-size: 1.1rem;
-    font-weight: bold;
-    color: #b91c1c;
-}
-
-.action-buttons {
-    display: flex;
     gap: 15px;
-    justify-content: center;
-    margin-top: 25px;
 }
 
-.btn-excel { background-color: #15803d; color: white; padding: 10px 20px; font-weight: bold; border: none; cursor: pointer;}
-.btn-pdf { background-color: #475569; color: white; padding: 10px 20px; font-weight: bold; border: none; cursor: pointer;}
+.form-group { display: flex; flex-direction: column; }
+.form-group label { font-size: 0.8rem; font-weight: bold; margin-bottom: 5px; text-transform: uppercase;}
+.form-group input { padding: 8px; border: 1px solid var(--border-color); border-radius: 4px; font-size: 0.9rem; }
 
-/* Cetak PDF Standar Dinas Konstruksi */
+/* Table Construction Styles */
+.table-responsive { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-bottom: 15px; }
+th, td { border: 1px solid #475569; padding: 8px; vertical-align: middle; }
+th { background-color: #f1f5f9; color: #000; font-weight: bold; text-align: center; text-transform: uppercase; }
+
+.row-division { background-color: #cbd5e1; font-weight: bold; }
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+
+table input { width: 100%; border: none; background: transparent; font-size: 0.85rem; padding: 4px; }
+table input:focus { background-color: #f1f5f9; outline: none; }
+table input[type="number"] { text-align: right; }
+
+/* Buttons */
+.btn {
+    padding: 10px 20px;
+    font-weight: bold;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: 0.2s;
+}
+.btn-blue { background-color: var(--navy); color: white; }
+.btn-blue:hover { background-color: #12255c; }
+.btn-green { background-color: var(--success); color: white; }
+.btn-green:hover { background-color: #0f632f; }
+.btn-red { background-color: #b91c1c; color: white; padding: 4px 8px; font-size: 0.75rem; }
+
+/* Summary Box */
+.summary-container { display: flex; justify-content: flex-end; margin-top: 15px; }
+.summary-box { width: 400px; border: 1px solid #475569; padding: 20px; background-color: var(--bg-light); border-radius: 6px; }
+.summary-row { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.9rem; }
+.grand-total { border-top: 2px dashed #000; padding-top: 10px; font-size: 1.1rem; font-weight: bold; color: #b91c1c; }
+
+/* Print Mode Optimization */
 @media print {
     body { background-color: white; padding: 0; }
-    .container { border: none; padding: 0; max-width: 100%; }
-    .no-print { display: none !important; }
-    input { border: none !important; background: transparent !important; pointer-events: none; }
-    th { background-color: #cbd5e1 !important; color: black; }
+    .container { border: none; box-shadow: none; padding: 0; }
+    .navbar, .no-print, .btn-red { display: none !important; }
+    input { border: none !important; pointer-events: none; }
 }
