@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SipilPro - Penyusunan RAB</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar no-print">
+            <a href="index.html">🏠 Dashboard Proyek</a>
+            <a href="rab.html" class="active">📊 Penyusunan RAB</a>
+            <a href="laporan.html">🖨️ Laporan Progres Fisik</a>
+        </nav>
+
+        <header>
+            <h1 id="headerProjName">Rencana Anggaran Biaya (RAB)</h1>
+            <p class="subtitle">Perhitungan Lembar Anggaran dan Pembobotan Struktur Biaya</p>
+        </header>
+
+        <section>
+            <h2>Lembar Input Nilai Anggaran Pekerjaan</h2>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th width="5%">No</th>
+                            <th width="45%">Uraian Item Pekerjaan Konstruksi</th>
+                            <th width="10%">Volume</th>
+                            <th width="10%">Satuan</th>
+                            <th width="15%">Harga Satuan (Rp)</th>
+                            <th width="15%">Jumlah Total (Rp)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rabTableBody">
+                        </tbody>
+                </table>
+            </div>
+
+            <div class="summary-container">
+                <div class="summary-box">
+                    <div class="summary-row grand-total">
+                        <span>Total Nilai Anggaran (RAB):</span>
+                        <span id="txtTotalRAB">Rp 0</span>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 20px; text-align: center;" class="no-print">
+                <button class="btn btn-green" onclick="saveRABData()">💾 Simpan Hasil Perhitungan RAB</button>
+            </div>
+        </section>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
