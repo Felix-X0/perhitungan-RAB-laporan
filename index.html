@@ -3,154 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SipilPro Kontraktor - Pembuat RAB & Laporan Progres</title>
+    <title>SipilPro - Dashboard Administrasi</title>
     <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 </head>
 <body>
-
     <div class="container">
+        <nav class="navbar no-print">
+            <a href="index.html" class="active">🏠 Dashboard Proyek</a>
+            <a href="rab.html">📊 Penyusunan RAB</a>
+            <a href="laporan.html">🖨️ Laporan Progres Fisik</a>
+        </nav>
+
         <header>
-            <div class="header-main">
-                <h1>LAPORAN RENCANA ANGGARAN BIAYA & PROGRES FISIK</h1>
-                <p class="subtitle">Sistem Manajemen Pengendalian Proyek Konstruksi</p>
-            </div>
+            <h1>SipilPro: Manajemen Pengendalian Proyek</h1>
+            <p class="subtitle">Data Administrasi dan Legalitas Kontrak Konstruksi</p>
         </header>
 
-        <section class="project-info">
-            <h2>Data Administrasi Proyek</h2>
+        <section>
+            <h2>Input Dokumen Administrasi Proyek</h2>
             <div class="grid-form">
                 <div class="form-group">
                     <label>Nama Paket Pekerjaan</label>
-                    <input type="text" id="projectName" value="Pembangunan Rumah Tinggal 2 Lantai">
+                    <input type="text" id="p_name" value="Pembangunan Fasilitas Air Bersih Kelurahan">
                 </div>
                 <div class="form-group">
-                    <label>Lokasi / Wilayah</label>
-                    <input type="text" id="projectLocation" value="Bandung, Jawa Barat">
+                    <label>Lokasi Proyek</label>
+                    <input type="text" id="p_loc" value="Kabupaten Sumedang, Jawa Barat">
                 </div>
                 <div class="form-group">
-                    <label>Pemilik Proyek (Owner)</label>
-                    <input type="text" id="projectOwner" value="Dinas Pekerjaan Umum / Swasta">
+                    <label>Nomor Kontrak Kerja</label>
+                    <input type="text" id="p_contract" value="602/04/SPK/PU-PR/2026">
                 </div>
                 <div class="form-group">
-                    <label>Kontraktor Pelaksana</label>
-                    <input type="text" id="projectContractor" value="PT. Bangun Semesta Utama">
+                    <label>Instansi Pemilik (Owner)</label>
+                    <input type="text" id="p_owner" value="Dinas Pekerjaan Umum Daerah">
                 </div>
+                <div class="form-group">
+                    <label>Perusahaan Kontraktor</label>
+                    <input type="text" id="p_contractor" value="PT. Karya Sarana Sipil">
+                </div>
+                <div class="form-group">
+                    <label>Konsultan Pengawas</label>
+                    <input type="text" id="p_supervisor" value="CV. Rekayasa Konsultan Utama">
+                </div>
+            </div>
+            <div style="margin-top: 25px; text-align: center;">
+                <button class="btn btn-blue" onclick="saveProjectInfo()">💾 Simpan Data Administrasi & Lanjut</button>
             </div>
         </section>
-
-        <section class="rab-section">
-            <h2>Lembar Kendali RAB & Progres Fisik Lapangan</h2>
-            <div class="table-responsive">
-                <table id="sipilTable">
-                    <thead>
-                        <tr>
-                            <th rowspan="2">No</th>
-                            <th rowspan="2">Uraian Pekerjaan / Divisi</th>
-                            <th rowspan="2">Satuan</th>
-                            <th colspan="3" class="text-center">Rencana Anggaran Biaya (RAB)</th>
-                            <th rowspan="2">Bobot Rencana (%)</th>
-                            <th colspan="2" class="text-center">Realisasi Lapangan</th>
-                        </tr>
-                        <tr>
-                            <th>Volume</th>
-                            <th>Harga Satuan (Rp)</th>
-                            <th>Jumlah Harga (Rp)</th>
-                            <th>Progres (%)</th>
-                            <th>Nilai Progres (Rp)</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tableBody">
-                        <tr class="row-division">
-                            <td><b>I</b></td>
-                            <td colspan="8"><b>PEKERJAAN PERSIAPAN & SMK3</b></td>
-                        </tr>
-                        <tr class="row-item" data-division="I">
-                            <td>1.1</td>
-                            <td><input type="text" class="input-job" value="Pembersihan Lahan dan Direksikit"></td>
-                            <td><input type="text" class="input-unit" value="M2"></td>
-                            <td><input type="number" class="input-qty" value="50" oninput="mainCalculator()"></td>
-                            <td><input type="number" class="input-price" value="45000" oninput="mainCalculator()"></td>
-                            <td class="cell-total-price">Rp 0</td>
-                            <td class="cell-weight">0.00%</td>
-                            <td><input type="number" class="input-progress" value="100" min="0" max="100" oninput="mainCalculator()"></td>
-                            <td class="cell-progress-value">Rp 0</td>
-                        </tr>
-                        <tr class="row-item" data-division="I">
-                            <td>1.2</td>
-                            <td><input type="text" class="input-job" value="Pengukuran dan Pasang Bouwplank"></td>
-                            <td><input type="text" class="input-unit" value="M1"></td>
-                            <td><input type="number" class="input-qty" value="30" oninput="mainCalculator()"></td>
-                            <td><input type="number" class="input-price" value="95000" oninput="mainCalculator()"></td>
-                            <td class="cell-total-price">Rp 0</td>
-                            <td class="cell-weight">0.00%</td>
-                            <td><input type="number" class="input-progress" value="50" min="0" max="100" oninput="mainCalculator()"></td>
-                            <td class="cell-progress-value">Rp 0</td>
-                        </tr>
-
-                        <tr class="row-division">
-                            <td><b>II</b></td>
-                            <td colspan="8"><b>PEKERJAAN TANAH DAN PONDASI</b></td>
-                        </tr>
-                        <tr class="row-item" data-division="II">
-                            <td>2.1</td>
-                            <td><input type="text" class="input-job" value="Galian Tanah Pondasi Batu Kali"></td>
-                            <td><input type="text" class="input-unit" value="M3"></td>
-                            <td><input type="number" class="input-qty" value="24" oninput="mainCalculator()"></td>
-                            <td><input type="number" class="input-price" value="85000" oninput="mainCalculator()"></td>
-                            <td class="cell-total-price">Rp 0</td>
-                            <td class="cell-weight">0.00%</td>
-                            <td><input type="number" class="input-progress" value="0" min="0" max="100" oninput="mainCalculator()"></td>
-                            <td class="cell-progress-value">Rp 0</td>
-                        </tr>
-                        <tr class="row-item" data-division="II">
-                            <td>2.2</td>
-                            <td><input type="text" class="input-job" value="Pasangan Pondasi Batu Belah 1:4"></td>
-                            <td><input type="text" class="input-unit" value="M3"></td>
-                            <td><input type="number" class="input-qty" value="18" oninput="mainCalculator()"></td>
-                            <td><input type="number" class="input-price" value="820000" oninput="mainCalculator()"></td>
-                            <td class="cell-total-price">Rp 0</td>
-                            <td class="cell-weight">0.00%</td>
-                            <td><input type="number" class="input-progress" value="0" min="0" max="100" oninput="mainCalculator()"></td>
-                            <td class="cell-progress-value">Rp 0</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="table-controls no-print">
-                <button class="btn-control btn-blue" onclick="addDivisionItem('I')">+ Tambah Item Divisi I</button>
-                <button class="btn-control btn-blue" onclick="addDivisionItem('II')">+ Tambah Item Divisi II</button>
-            </div>
-        </section>
-
-        <section class="summary-section">
-            <div class="summary-box">
-                <div class="summary-row">
-                    <span>Total Nilai Kontrak (RAB):</span>
-                    <span id="lblTotalRAB">Rp 0</span>
-                </div>
-                <div class="summary-row">
-                    <span>Kumulatif Bobot Rencana:</span>
-                    <span id="lblTotalWeight">0.00%</span>
-                </div>
-                <div class="summary-row text-success">
-                    <span>Total Progres Fisik Riil:</span>
-                    <span id="lblTotalProgressPercent">0.00%</span>
-                </div>
-                <div class="summary-row grand-total">
-                    <span>Nilai Opname Terkini:</span>
-                    <span id="lblTotalProgressValue">Rp 0</span>
-                </div>
-            </div>
-        </section>
-
-        <div class="action-buttons no-print">
-            <button class="btn-excel" onclick="exportExcelSipil()">📊 Ekspor Format Lap-Sipil (.xlsx)</button>
-            <button class="btn-pdf" onclick="window.print()">🖨️ Cetak Fisik / Simpan PDF</button>
-        </div>
     </div>
-
     <script src="script.js"></script>
 </body>
 </html>
