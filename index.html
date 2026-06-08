@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SipilPro - Kalkulator RAB & Laporan</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+</head>
+<body>
+
+    <div class="container">
+        <header class="no-print">
+            <h1>SipilPro</h1>
+            <p>Penyusunan Rencana Anggaran Biaya (RAB) Proyek</p>
+        </header>
+
+        <section class="project-info">
+            <h2>Data Proyek</h2>
+            <div class="grid-form">
+                <div class="form-group">
+                    <label>Nama Proyek</label>
+                    <input type="text" id="projectName" value="Pembangunan Rumah Tinggal Type 45">
+                </div>
+                <div class="form-group">
+                    <label>Lokasi Proyek</label>
+                    <input type="text" id="projectLocation" value="Jakarta, Indonesia">
+                </div>
+                <div class="form-group">
+                    <label>Pemilik (Owner)</label>
+                    <input type="text" id="projectOwner" value="Bpk. Sudirman">
+                </div>
+                <div class="form-group">
+                    <label>Tanggal Dibuat</label>
+                    <input type="date" id="projectDate">
+                </div>
+            </div>
+        </section>
+
+        <section class="rab-section">
+            <h2>Rincian Anggaran Biaya</h2>
+            <div class="table-responsive">
+                <table id="rabTable">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Uraian Pekerjaan</th>
+                            <th>Volume</th>
+                            <th>Satuan</th>
+                            <th>Harga Satuan (Rp)</th>
+                            <th>Total Harga (Rp)</th>
+                            <th class="no-print">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rabBody">
+                        <tr>
+                            <td class="row-number">1</td>
+                            <td><input type="text" class="input-job" value="Pekerjaan Galian Tanah"></td>
+                            <td><input type="number" class="input-qty" value="10" oninput="calculateRow(this)"></td>
+                            <td><input type="text" class="input-unit" value="m3"></td>
+                            <td><input type="number" class="input-price" value="75000" oninput="calculateRow(this)"></td>
+                            <td class="row-total">Rp 750.000</td>
+                            <td class="no-print"><button class="btn-delete" onclick="deleteRow(this)">Hapus</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <button class="btn-add no-print" onclick="addRow()">+ Tambah Pekerjaan</button>
+        </section>
+
+        <section class="summary-section">
+            <div class="summary-box">
+                <div class="summary-row">
+                    <span>Subtotal:</span>
+                    <span id="subTotal">Rp 750.000</span>
+                </div>
+                <div class="summary-row">
+                    <span>PPN (11%):</span>
+                    <span id="taxTotal">Rp 82.500</span>
+                </div>
+                <div class="summary-row grand-total">
+                    <span>Total Akhir:</span>
+                    <span id="grandTotal">Rp 832.500</span>
+                </div>
+            </div>
+        </section>
+
+        <div class="action-buttons no-print">
+            <button class="btn-excel" onclick="exportToExcel()">📊 Ekspor ke Excel</button>
+            <button class="btn-pdf" onclick="window.print()">🖨️ Cetak / Simpan PDF</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
