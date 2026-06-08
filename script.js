@@ -1,86 +1,113 @@
-// Mengatur tanggal otomatis hari ini pada form proyek
-document.getElementById('projectDate').valueAsDate = new Date();
+// Menjalankan perhitungan otomatis saat halaman pertama kali dimuat
+document.addEventListener("DOMContentLoaded", () => {
+    mainCalculator();
+});
 
-// Fungsi menambahkan baris pekerjaan baru ke tabel
-function addRow() {
-    const tbody = document.getElementById('rabBody');
-    const rowCount = tbody.rows.length + 1;
-    
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-        <td class="row-number">${rowCount}</td>
-        <td><input type="text" class="input-job" placeholder="Nama Pekerjaan Baru"></td>
-        <td><input type="number" class="input-qty" value="0" oninput="calculateRow(this)"></td>
-        <td><input type="text" class="input-unit" placeholder="satuan"></td>
-        <td><input type="number" class="input-price" value="0" oninput="calculateRow(this)"></td>
-        <td class="row-total">Rp 0</td>
-        <td class="no-print"><button class="btn-delete" onclick="deleteRow(this)">Hapus</button></td>
-    `;
-    tbody.appendChild(tr);
-    updateRowNumbers();
-    calculateGrandTotal();
-}
+// Fungsi Utama Kalkulasi Teknik Sipil Terintegrasi
+function mainCalculator() {
+    const rows = document.querySelectorAll(".row-item");
+    let totalRAB = 0;
 
-// Fungsi menghapus baris tabel
-function deleteRow(button) {
-    const row = button.parentNode.parentNode;
-    row.parentNode.removeChild(row);
-    updateRowNumbers();
-    calculateGrandTotal();
-}
-
-// Merapikan kembali urutan nomor (1, 2, 3...) jika ada baris yang dihapus
-function updateRowNumbers() {
-    const rows = document.querySelectorAll('#rabBody tr');
-    rows.forEach((row, index) => {
-        row.querySelector('.row-number').innerText = index + 1;
-    });
-}
-
-// Menghitung subtotal per baris otomatis (Volume x Harga Satuan)
-function calculateRow(input) {
-    const row = input.parentNode.parentNode;
-    const qty = parseFloat(row.querySelector('.input-qty').value) || 0;
-    const price = parseFloat(row.querySelector('.input-price').value) || 0;
-    
-    const total = qty * price;
-    row.querySelector('.row-total').innerText = formatRupiah(total);
-    
-    calculateGrandTotal();
-}
-
-// Menghitung akumulasi nilai keseluruhan (Subtotal, PPN, dan Total Akhir)
-function calculateGrandTotal() {
-    const rows = document.querySelectorAll('#rabBody tr');
-    let subTotal = 0;
-    
+    // Langkah 1: Hitung Jumlah Harga Kontrak per Item Pekerjaan
     rows.forEach(row => {
-        const qty = parseFloat(row.querySelector('.input-qty').value) || 0;
-        const price = parseFloat(row.querySelector('.input-price').value) || 0;
-        subTotal += (qty * price);
+        const qty = parseFloat(row.querySelector(".input-qty").value) || 0;
+        const price = parseFloat(row.querySelector(".input-price").value) || 0;
+        const totalPrice = qty * price;
+        
+        row.querySelector(".cell-total-price").innerText = formatRupiah(totalPrice);
+        row.setAttribute("data-total-harga", totalPrice); // Menyimpan nilai angka murni
+        totalRAB += totalPrice;
     });
+
+    // Menampilkan Total Anggaran Biaya Proyek (RAB)
+    document.getElementById("lblTotalRAB").innerText = formatRupiah(totalRAB);
+
+    // Langkah 2 & 3: Hitung Bobot Rencana & Nilai Opname Riil Lapangan
+    let totalWeightAccumulated = 0;
+    let totalProgressValueAccumulated = 0;
+
+    rows.forEach(row => {
+        const itemPrice = parseFloat(row.getAttribute("data-total-harga")) || 0;
+        
+        // Rumus Sipil: Bobot % = (Harga Item / Total Nilai Proyek) * 100
+        let itemWeight = totalRAB > 0 ? (itemPrice / totalRAB) * 100 : 0;
+        row.querySelector(".cell-weight").innerText = itemWeight.toFixed(2) + "%";
+        totalWeightAccumulated += itemWeight;
+
+        // Membaca input nilai progres lapangan (%)
+        const progressPercent = parseFloat(row.querySelector(".input-progress").value) || 0;
+        
+        // Rumus Sipil: Nilai Progres Rp = (Progres Fisik % / 100) * Harga Kontrak Item
+        const progressValue = (progressPercent / 100) * itemPrice;
+        row.querySelector(".cell-progress-value").innerText = formatRupiah(progressValue);
+        totalProgressValueAccumulated += progressValue;
+    });
+
+    // Menampilkan Akumulasi Parameter Progress di Box Rekapitulasi
+    document.getElementById("lblTotalWeight").innerText = totalWeightAccumulated.toFixed(0) + ".00%";
+    document.getElementById("lblTotalProgressValue").innerText = formatRupiah(totalProgressValueAccumulated);
     
-    const tax = subTotal * 0.11; // PPN Standar 11%
-    const grandTotal = subTotal + tax;
-    
-    document.getElementById('subTotal').innerText = formatRupiah(subTotal);
-    document.getElementById('taxTotal').innerText = formatRupiah(tax);
-    document.getElementById('grandTotal').innerText = formatRupiah(grandTotal);
+    // Rumus Akumulasi Progres Fisik Total Proyek (%)
+    let totalProgressPercent = totalRAB > 0 ? (totalProgressValueAccumulated / totalRAB) * 100 : 0;
+    document.getElementById("lblTotalProgressPercent").innerText = totalProgressPercent.toFixed(2) + "%";
 }
 
-// Helper pengubah angka murni menjadi format mata uang Rupiah teks
+// Fungsi Menambahkan Baris Item Baru di Bawah Divisi yang Dipilih
+function addDivisionItem(divId) {
+    const tbody = document.getElementById("tableBody");
+    const targetDivisionRow = Array.from(tbody.querySelectorAll(".row-division")).find(row => {
+        return row.cells[0].innerText.trim() === divId;
+    });
+
+    if (!targetDivisionRow) return;
+
+    // Mencari baris terakhir di divisi tersebut untuk menyisipkan baris baru di bawahnya
+    let lastRowOfDivision = targetDivisionRow;
+    let nextRow = targetDivisionRow.nextElementSibling;
+    while (nextRow && !nextRow.classList.contains("row-division")) {
+        lastRowOfDivision = nextRow;
+        nextRow = nextRow.nextElementSibling;
+    }
+
+    const tr = document.createElement("tr");
+    tr.className = "row-item";
+    tr.setAttribute("data-division", divId);
+    tr.innerHTML = `
+        <td>${divId}.x</td>
+        <td><input type="text" class="input-job" placeholder="Nama Pekerjaan Baru"></td>
+        <td><input type="text" class="input-unit" placeholder="Satuan"></td>
+        <td><input type="number" class="input-qty" value="0" oninput="mainCalculator()"></td>
+        <td><input type="number" class="input-price" value="0" oninput="mainCalculator()"></td>
+        <td class="cell-total-price">Rp 0</td>
+        <td class="cell-weight">0.00%</td>
+        <td><input type="number" class="input-progress" value="0" min="0" max="100" oninput="mainCalculator()"></td>
+        <td class="cell-progress-value">Rp 0</td>
+    `;
+
+    lastRowOfDivision.insertAdjacentElement("afterend", tr);
+    reindexItemNumbers();
+    mainCalculator();
+}
+
+// Merapikan Kode Penomoran Sub-Item (Contoh: 1.1, 1.2, 1.3) Otomatis
+function reindexItemNumbers() {
+    ["I", "II"].forEach(divId => {
+        const items = document.querySelectorAll(`.row-item[data-division="${divId}"]`);
+        items.forEach((item, index) => {
+            item.cells[0].innerText = `${divId}.${index + 1}`;
+        });
+    });
+}
+
+// Format Angka ke Rupiah Indonesia Kontrak Konstruksi
 function formatRupiah(angka) {
-    return 'Rp ' + angka.toLocaleString('id-ID');
+    return "Rp " + Math.round(angka).toLocaleString("id-ID");
 }
 
-// Sistem Ekspor Tabel Terkonversi Menjadi File Excel murni (.xlsx)
-function exportToExcel() {
-    const projectName = document.getElementById('projectName').value || 'Proyek';
-    
-    // Konversi tabel HTML menjadi struktur data Excel sheet
-    const table = document.getElementById('rabTable');
-    const wb = XLSX.utils.table_to_book(table, { sheet: "RAB Proyek" });
-    
-    // Download file ke komputer / HP user
-    XLSX.writeFile(wb, `RAB_${projectName.replace(/ /g, "_")}.xlsx`);
+// Handler Ekspor Otomatis Menjadi Spreadsheet Excel Resmi (.xlsx)
+function exportExcelSipil() {
+    const table = document.getElementById("sipilTable");
+    const wb = XLSX.utils.table_to_book(table, { sheet: "Laporan Opname Progres" });
+    const fileName = document.getElementById("projectName").value.replace(/ /g, "_");
+    XLSX.writeFile(wb, `Laporan_Fisik_RAB_${fileName}.xlsx`);
 }
